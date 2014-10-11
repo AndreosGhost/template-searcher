@@ -2,6 +2,7 @@ package phoenix.templatesearcher.matchers;
 
 import static java.lang.Math.max;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,15 +13,45 @@ import phoenix.templatesearcher.support.Occurence;
 
 public class NaiveTemplateMatcher implements IMetaTemplateMatcher {
     private List<char[]> templates;
+    private List<Integer> hashCodes;
 
     public NaiveTemplateMatcher() {
 	templates = new LinkedList<>();
+	hashCodes = new LinkedList<>();
     }
 
     @Override
     public int addTemplate(String template)
 	    throws UnsupportedOperationException {
+	if (template.isEmpty()) {
+	    throw new IllegalArgumentException("Template must not be empty");
+	}
+	
+	int hashCode = template.hashCode();
+	
+	Iterator<char[]> templateIterator = templates.iterator();
+	Iterator<Integer> hashCodeIterator = hashCodes.iterator();
+	
+	while (hashCodeIterator.hasNext()) {
+	    int nextHashCode = hashCodeIterator.next();
+	    char[] nextTemplate = templateIterator.next();
+	    if (nextHashCode == hashCode && nextTemplate.length == template.length()) {
+		boolean equal = true;
+		for (int i = 0, len = template.length(); i < len; i++) {
+		    if (nextTemplate[i] != template.charAt(i)) {
+			equal = false;
+			break;
+		    }
+		}
+		
+		if (equal) {
+		    throw new IllegalArgumentException("Duplicate template given: " + template);
+		}
+	    }
+	}
+	
 	templates.add(template.toCharArray());
+	hashCodes.add(hashCode);
 	return templates.size() - 1;
     }
 
