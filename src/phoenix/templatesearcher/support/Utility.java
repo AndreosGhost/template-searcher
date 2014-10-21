@@ -52,7 +52,7 @@ public class Utility {
     public static void recountPrefixFunction(char[] data, int[] pi, int begin,
 	    int end) {
 	if (begin == 0) {
-	    data[0] = 0;
+	    pi[0] = 0;
 	    begin++;
 	}
 	for (int j = begin; j < end; j++) {

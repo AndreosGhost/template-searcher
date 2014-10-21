@@ -43,3 +43,4 @@
 ### Что сделано
 
 На текущий момент реализованы пункты 3.1 и 3.2 задания: NaiveTemplateMatcher, SingleTemplateMatcher вместе с тестами (суффиксы -Test, -TestOnce)
+
