@@ -5,19 +5,19 @@ import phoenix.templatesearcher.api.ICharStream;
 public class StringCharStream implements ICharStream {
     private char[] stream;
     private int position;
-    
+
     public StringCharStream(String str) {
-	this.stream = str.toCharArray();
-	this.position = 0;
-    }
-    
-    @Override
-    public boolean isEmpty() {
-	return position >= stream.length;
+        this.stream = str.toCharArray();
+        this.position = 0;
     }
 
     @Override
     public char nextChar() {
-	return stream[position++];
+        return stream[position++];
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return position >= stream.length;
     }
 }

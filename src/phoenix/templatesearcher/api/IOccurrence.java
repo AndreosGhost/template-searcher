@@ -1,6 +1,6 @@
 package phoenix.templatesearcher.api;
 
-public interface IOccurence {
+public interface IOccurrence {
     public int getIndex();
 
     public int getTemplateID();
