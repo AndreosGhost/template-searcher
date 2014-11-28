@@ -1,6 +1,5 @@
 package phoenix.templatesearcher.test.matchers.parameterized;
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -40,11 +39,11 @@ public class SingleTemplateMatcherTest extends BasicMatcherTest {
         return ICharComparator.DEFAULT_COMPARATOR;
     }
 
-    @Override
-    @Test
-    public void testMatchStream() {
-        //perform test
-        super.testMatchStream();
-    }
+//    @Override
+//    @Test
+//    public void testMatchStream() {
+//        //perform test
+//        super.testMatchStream();
+//    }
 
 }

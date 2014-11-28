@@ -23,8 +23,6 @@ public class NaiveTemplateMatcherTest extends BasicMatcherTest {
     public static Collection<Object[]> data() {
         LinkedList<Object[]> tests = new LinkedList<>();
 
-        int testsCount;
-
         addTestDataOneLongTemplateShortStream(tests, randomInt(10, 50));
         addTestDataOneTemplate(tests, randomInt(30, 1000));
         addTestDataMultipleTemplates(tests, randomInt(30, 1000));
@@ -33,13 +31,13 @@ public class NaiveTemplateMatcherTest extends BasicMatcherTest {
     }
 
     @Override
-    public ICharComparator obtainCharComparator() {
-        return ICharComparator.DEFAULT_COMPARATOR;
+    public IMetaTemplateMatcher obtainFreshMatcher() {
+        return new NaiveTemplateMatcher();
     }
 
     @Override
-    public IMetaTemplateMatcher obtainFreshMatcher() {
-        return new NaiveTemplateMatcher();
+    public ICharComparator obtainCharComparator() {
+        return ICharComparator.DEFAULT_COMPARATOR;
     }
 
 }

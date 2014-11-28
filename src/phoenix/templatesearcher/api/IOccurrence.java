@@ -1,7 +1,15 @@
 package phoenix.templatesearcher.api;
 
 public interface IOccurrence {
-    public int getIndex();
+    /**
+     * Returns right position of template occurrence.
+     * @return
+     */
+    int getIndex();
 
-    public int getTemplateID();
+    /**
+     * Returns template id which occurrence is described.
+     * @return
+     */
+    int getTemplateID();
 }

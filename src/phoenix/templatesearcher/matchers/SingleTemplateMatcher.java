@@ -9,8 +9,10 @@ import phoenix.templatesearcher.support.Occurrence;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class SingleTemplateMatcher implements IMetaTemplateMatcher {
+    private static final int TEMPLATE_ID = 0;
     protected ICharComparator comparator;
     private int templateLength;
     private char[] data;
@@ -73,35 +75,35 @@ public class SingleTemplateMatcher implements IMetaTemplateMatcher {
 
     @Override
     public int addTemplate(String template) throws UnsupportedOperationException {
+        Objects.requireNonNull(template, "Template must not be null");
         if (template.isEmpty()) {
             throw new IllegalArgumentException("Template must not be empty");
         }
-        if (this.data == null) {
-            templateLength = template.length();
 
-            data = new char[templateLength * 3 + 1];
-            System.arraycopy(template.toCharArray(), 0, data, 0, templateLength);
-            data[templateLength] = ICharComparator.SERVICE_SYMBOL;
-
-            pi = new int[data.length];
-            PrefixFunction.countPrefixFunction(data, pi, 1, templateLength, comparator);
-
-            appendedCharacters = new LinkedList<>();
-            prependedCharacters = new LinkedList<>();
-
-            return 0;
-        } else {
-            throw new UnsupportedOperationException(
-                    "Cannot add more then one template");
+        if (this.data != null) {
+            throw new UnsupportedOperationException("Cannot add more then one template");
         }
+
+        templateLength = template.length();
+
+        data = new char[templateLength * 3 + 1];
+        System.arraycopy(template.toCharArray(), 0, data, 0, templateLength);
+        data[templateLength] = ICharComparator.SERVICE_SYMBOL;
+
+        pi = new int[data.length];
+        PrefixFunction.countPrefixFunction(data, pi, 1, templateLength, comparator);
+
+        appendedCharacters = new LinkedList<>();
+        prependedCharacters = new LinkedList<>();
+
+        return TEMPLATE_ID;
     }
 
     @Override
     public List<IOccurrence> matchStream(ICharStream stream) {
         // delayed template update and prefix function rebuilding
         if (!appendedCharacters.isEmpty() || !prependedCharacters.isEmpty()) {
-            int newTemplateLength =
-                    templateLength + appendedCharacters.size() + prependedCharacters.size();
+            int newTemplateLength = templateLength + appendedCharacters.size() + prependedCharacters.size();
             char[] newData = new char[newTemplateLength * 3 + 1];
             int pointer = 0;
 
@@ -157,8 +159,7 @@ public class SingleTemplateMatcher implements IMetaTemplateMatcher {
             int newDataBegin = bufferOffset + copySize;
 
             pointer = newDataBegin;
-            for (int dataLength = data.length; pointer < dataLength && !stream.isEmpty();
-                 pointer++) {
+            for (int dataLength = data.length; pointer < dataLength && !stream.isEmpty(); pointer++) {
                 data[pointer] = stream.nextChar();
             }
 
@@ -187,7 +188,7 @@ public class SingleTemplateMatcher implements IMetaTemplateMatcher {
 
         for (int i = begin; i < end; i++) {
             if (pi[i] == templateLength) {
-                results.add(new Occurrence(i - begin + offset, 0));
+                results.add(new Occurrence(i - begin + offset, TEMPLATE_ID));
             }
         }
 

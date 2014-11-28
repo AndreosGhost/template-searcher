@@ -1,7 +1,7 @@
 package phoenix.templatesearcher.matchers;
 
+import phoenix.templatesearcher.algo.FinalPineNode;
 import phoenix.templatesearcher.algo.PineForest;
-import phoenix.templatesearcher.algo.SimplePineNode;
 import phoenix.templatesearcher.api.ICharStream;
 import phoenix.templatesearcher.api.IMetaTemplateMatcher;
 import phoenix.templatesearcher.api.IOccurrence;
@@ -9,24 +9,25 @@ import phoenix.templatesearcher.support.Occurrence;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import static java.lang.Math.*;
 
 public class NaiveTemplateMatcher implements IMetaTemplateMatcher {
-    private PineForest templatesForest;
+    private PineForest<FinalPineNode> templatesForest;
 
     private int forestTemplatesCount;
 
     private String[] templates;
 
     public NaiveTemplateMatcher() {
-        templatesForest = new PineForest(new SimplePineNode());
+        templatesForest = new PineForest<>(new FinalPineNode());
         forestTemplatesCount = 0;
     }
 
     @Override
-    public int addTemplate(String template)
-            throws UnsupportedOperationException, IllegalArgumentException {
+    public int addTemplate(String template) throws UnsupportedOperationException, IllegalArgumentException {
+        Objects.requireNonNull(template, "Template must not be null");
         if (template.isEmpty()) {
             throw new IllegalArgumentException("Template must not be empty");
         }

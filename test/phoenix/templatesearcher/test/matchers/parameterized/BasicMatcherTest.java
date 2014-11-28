@@ -9,7 +9,8 @@ import phoenix.templatesearcher.test.matchers.IMatcherTest;
 import phoenix.templatesearcher.test.matchers.MatcherTester;
 
 /**
- * This is a basic class for all tests on implementations of {@link phoenix.templatesearcher.api.IMetaTemplateMatcher}.
+ * This is a basic class for all tests on implementations of {@link phoenix.templatesearcher.api
+ * .IMetaTemplateMatcher}.
  * Each
  * extension of this class should provide the following method:<br/> {@code public static
  * Collection<Object[]> data() } as described in {@link Parameterized} runner.
@@ -29,7 +30,6 @@ public abstract class BasicMatcherTest implements IMatcherTest {
      */
     @Test
     public void testMatchStream() {
-        MatcherTester
-                .testMatchStream(obtainFreshMatcher(), stream, templates, obtainCharComparator());
+        MatcherTester.testMatchStream(obtainFreshMatcher(), stream, templates, obtainCharComparator());
     }
 }

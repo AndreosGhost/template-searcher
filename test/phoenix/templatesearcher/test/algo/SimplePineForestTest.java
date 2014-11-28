@@ -6,8 +6,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+import phoenix.templatesearcher.algo.FinalPineNode;
 import phoenix.templatesearcher.algo.PineForest;
-import phoenix.templatesearcher.algo.SimplePineNode;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -52,7 +52,7 @@ public class SimplePineForestTest {
         try {
             Map<String, Integer> identitiesMap = new HashMap<>(strings.length * 4);
 
-            PineForest<SimplePineNode> forest = new PineForest<>(new SimplePineNode());
+            PineForest<FinalPineNode> forest = new PineForest<>(new FinalPineNode());
 
             for (int str = 0, count = strings.length, idCounter = 0; str < count; str++) {
                 String line = strings[str];
@@ -67,9 +67,7 @@ public class SimplePineForestTest {
             String[] forestLines = forest.listLines();
 
             Assert.assertEquals(
-                    "Forest and naive lines count do not match",
-                    identitiesMap.size(),
-                    forestLines.length);
+                    "Forest and naive lines count do not match", identitiesMap.size(), forestLines.length);
             for (int id = 0, count = forestLines.length; id < count; id++) {
                 Integer expectedID = identitiesMap.get(forestLines[id]);
 

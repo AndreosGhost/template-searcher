@@ -5,7 +5,7 @@ package phoenix.templatesearcher.api;
  * @author phoenix
  */
 public interface ICharStream {
-    public char nextChar();
+    char nextChar();
 
-    public boolean isEmpty();
+    boolean isEmpty();
 }

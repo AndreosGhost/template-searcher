@@ -16,7 +16,8 @@ public interface IMatcherTest {
 
     /**
      * Obtains char comparator used to distinguish characters.<br/>
-     * In most cases you will need {@link phoenix.templatesearcher.support.ICharComparator#DEFAULT_COMPARATOR}.<br/>
+     * In most cases you will need {@link phoenix.templatesearcher.support
+     * .ICharComparator#DEFAULT_COMPARATOR}.<br/>
      * Note that your matcher must use the same {@link phoenix.templatesearcher.support.ICharComparator}
      * that is returned by this method.
      * @return

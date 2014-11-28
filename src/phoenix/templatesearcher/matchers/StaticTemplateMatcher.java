@@ -1,7 +1,8 @@
 package phoenix.templatesearcher.matchers;
 
-import phoenix.templatesearcher.algo.IOptimizedLinkedPineNode;
-import phoenix.templatesearcher.algo.OptimizedLinkedPineForest;
+import phoenix.templatesearcher.algo.FinalOptimizedLinkedPineForest;
+import phoenix.templatesearcher.algo.FinalOptimizedLinkedPineNode;
+import phoenix.templatesearcher.algo.api.IOptimizedLinkedPineNode;
 import phoenix.templatesearcher.api.ICharStream;
 import phoenix.templatesearcher.api.IMetaTemplateMatcher;
 import phoenix.templatesearcher.api.IOccurrence;
@@ -9,12 +10,13 @@ import phoenix.templatesearcher.support.Occurrence;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class StaticTemplateMatcher implements IMetaTemplateMatcher {
     /**
      * Used for templates store and matches search.
      */
-    private OptimizedLinkedPineForest templatesForest = new OptimizedLinkedPineForest();
+    private FinalOptimizedLinkedPineForest templatesForest;
 
     /**
      * Counter for template identities.
@@ -24,7 +26,17 @@ public class StaticTemplateMatcher implements IMetaTemplateMatcher {
     /**
      * Indicates whether adding templates is forbidden.
      */
-    private boolean forbidAddTemplate = false;
+    private boolean forbidAddTemplate;
+
+    public StaticTemplateMatcher() {
+        templatesForest = new FinalOptimizedLinkedPineForest();
+        forbidAddTemplate = false;
+    }
+
+    StaticTemplateMatcher(FinalOptimizedLinkedPineForest forest) {
+        templatesForest = forest;
+        forbidAddTemplate = true;
+    }
 
     @Override
     public int addTemplate(String template) throws UnsupportedOperationException {
@@ -32,6 +44,8 @@ public class StaticTemplateMatcher implements IMetaTemplateMatcher {
             throw new UnsupportedOperationException(
                     "Cannot add templates after a first call to matchStream(ICharStream) is done");
         }
+
+        Objects.requireNonNull(template, "Template must not be null");
         if (template.isEmpty()) {
             throw new IllegalArgumentException("Template must not be empty");
         }
@@ -46,13 +60,13 @@ public class StaticTemplateMatcher implements IMetaTemplateMatcher {
 
         List<IOccurrence> occurrences = new LinkedList<>();
 
-        IOptimizedLinkedPineNode node = templatesForest;
+        IOptimizedLinkedPineNode<FinalOptimizedLinkedPineNode> node = templatesForest;
 
         int index = 0;
 
         while (!stream.isEmpty()) {
             char nextChar = stream.nextChar();
-            node = (IOptimizedLinkedPineNode) node.go(nextChar);
+            node = node.go(nextChar);
             List<? extends IOptimizedLinkedPineNode> matches = node.listEndsOfLine();
 
             for (IOptimizedLinkedPineNode match : matches) {

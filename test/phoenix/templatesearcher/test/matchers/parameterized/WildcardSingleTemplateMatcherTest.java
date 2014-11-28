@@ -12,13 +12,13 @@ import static phoenix.templatesearcher.support.Utility.*;
 @RunWith(Parameterized.class)
 public class WildcardSingleTemplateMatcherTest extends SingleTemplateMatcherTest {
     @Override
-    public ICharComparator obtainCharComparator() {
-        return ICharComparator.WILDCARD_COMPARATOR;
+    public IMetaTemplateMatcher obtainFreshMatcher() {
+        return new WildcardSingleTemplateMatcher();
     }
 
     @Override
-    public IMetaTemplateMatcher obtainFreshMatcher() {
-        return new WildcardSingleTemplateMatcher();
+    public ICharComparator obtainCharComparator() {
+        return ICharComparator.WILDCARD_COMPARATOR;
     }
 
     @Test

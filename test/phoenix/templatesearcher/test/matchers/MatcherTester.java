@@ -2,14 +2,15 @@ package phoenix.templatesearcher.test.matchers;
 
 import junit.framework.AssertionFailedError;
 import org.junit.runners.Parameterized;
+import phoenix.templatesearcher.algo.FinalPineNode;
 import phoenix.templatesearcher.algo.PineForest;
-import phoenix.templatesearcher.algo.SimplePineNode;
 import phoenix.templatesearcher.api.IMetaTemplateMatcher;
 import phoenix.templatesearcher.api.IOccurrence;
 import phoenix.templatesearcher.exception.DuplicateLineException;
 import phoenix.templatesearcher.support.ICharComparator;
 import phoenix.templatesearcher.support.Occurrence;
 import phoenix.templatesearcher.support.ReadOnlyPair;
+import phoenix.templatesearcher.support.Utility;
 import phoenix.templatesearcher.test.support.StringCharStream;
 
 import java.util.Arrays;
@@ -55,10 +56,51 @@ public final class MatcherTester {
                                                               int maxTemplateLength,
                                                               int minStreamLength,
                                                               int maxStreamLength) {
-        String stream = randomString(randomInt(minStreamLength, maxStreamLength));
+        return makeTestData(
+                templatesMinCount,
+                templatesMaxCount,
+                minTemplateLength,
+                maxTemplateLength,
+                minStreamLength,
+                maxStreamLength,
+                Utility::randomString,
+                Utility::randomString);
+    }
+
+    /**
+     * Generates a random test according to given parameter boundaries.<br/>
+     * It is not guaranteed that templates count will be greater than {@code templatesMinCount}
+     * because of difficulties connected with random generation of unique strings.
+     * @param templatesMinCount
+     *         minimal count of templates
+     * @param templatesMaxCount
+     *         maximal count of templates
+     * @param minTemplateLength
+     *         minimal length of each template
+     * @param maxTemplateLength
+     *         maximal length of each template
+     * @param minStreamLength
+     *         minimal length of the stream
+     * @param maxStreamLength
+     *         maximal length of the stream
+     * @param templateSupplier
+     *         generator of strings for templates.
+     * @param streamSupplier
+     *         generator of stream string.
+     * @return a pair (stream, templates[])
+     */
+    public static ReadOnlyPair<String, String[]> makeTestData(int templatesMinCount,
+                                                              int templatesMaxCount,
+                                                              int minTemplateLength,
+                                                              int maxTemplateLength,
+                                                              int minStreamLength,
+                                                              int maxStreamLength,
+                                                              StringSupplier streamSupplier,
+                                                              StringSupplier templateSupplier) {
+        String stream = streamSupplier.supplyString(randomInt(minStreamLength, maxStreamLength));
         int templatesCount = randomInt(templatesMinCount, templatesMaxCount);
 
-        PineForest<SimplePineNode> templatesForest = new PineForest<>(new SimplePineNode());
+        PineForest<FinalPineNode> templatesForest = new PineForest<>(new FinalPineNode());
 
         /*
         The problem is that randomString() method called many times can generate equal lines.
@@ -70,7 +112,7 @@ public final class MatcherTester {
         int maxRepeatsWithSameI = 10;
 
         for (int i = 0; i < templatesCount; i++) {
-            String template = randomString(randomInt(minTemplateLength, maxTemplateLength));
+            String template = templateSupplier.supplyString(randomInt(minTemplateLength, maxTemplateLength));
             try {
                 templatesForest.addLine(template.toCharArray(), i);
                 repeatsWithSameI = 0;
@@ -87,14 +129,10 @@ public final class MatcherTester {
         return new ReadOnlyPair<>(stream, templatesForest.listLines());
     }
 
-    private static int indexOf(String source,
-                               String substr,
-                               int fromIndex,
-                               ICharComparator comparator) {
+    private static int indexOf(String source, String substr, int fromIndex, ICharComparator comparator) {
         for (int i = fromIndex, iLast = source.length() - substr.length(); i <= iLast; i++) {
             boolean matchFound = true;
-            for (int srcInd = i, subInd = 0, subLen = substr.length(); subInd < subLen;
-                 srcInd++, subInd++) {
+            for (int srcInd = i, subInd = 0, subLen = substr.length(); subInd < subLen; srcInd++, subInd++) {
                 if (!(comparator.areEqual(source.charAt(srcInd), substr.charAt(subInd)))) {
                     matchFound = false;
                     break;
@@ -145,8 +183,7 @@ public final class MatcherTester {
         }
     }
 
-    public static void addTestDataOneLongTemplateShortStream(Collection<Object[]> data,
-                                                             int testsCount) {
+    public static void addTestDataOneLongTemplateShortStream(Collection<Object[]> data, int testsCount) {
         for (int test = 0; test < testsCount; test++) {
             data.add(
                     MatcherTester.wrapParameters(makeTestData(1, 1, 15, 20, 1, 30)));
@@ -210,6 +247,18 @@ public final class MatcherTester {
     }
 
     /**
+     * Performs a single test with given parameters.<br/>
+     * Equivalent to call {@code testMatchStream(matcher, data.getKey(), data.getValue(), comparator);}.
+     * @param data
+     *         test data containing stream and templates array.
+     */
+    public static void testMatchStream(IMetaTemplateMatcher matcher,
+                                       ReadOnlyPair<String, String[]> data,
+                                       ICharComparator comparator) {
+        testMatchStream(matcher, data.getKey(), data.getValue(), comparator);
+    }
+
+    /**
      * Performs a single test for the given matcher with given parameters and checks the results.
      * @param matcher
      *         Matcher to test.
@@ -220,7 +269,8 @@ public final class MatcherTester {
      * @param comparator
      *         Object used to distinguish characters.
      * @param addTemplatesToMatcher
-     *         If true, templates are added using {@link phoenix.templatesearcher.api.IMetaTemplateMatcher#addTemplate(String)}
+     *         If true, templates are added using {@link phoenix.templatesearcher.api
+     *         .IMetaTemplateMatcher#addTemplate(String)}
      *         method. Otherwise they are considered to be present there.
      */
     public static void testMatchStream(IMetaTemplateMatcher matcher,
@@ -252,13 +302,20 @@ public final class MatcherTester {
      * Performs a single test with given parameters.<br/>
      * Equivalent to call {@code testMatchStream(matcher, stream, templates, comparator, true);}.
      * @param stream
+     *         Stream to test the matcher against.
      * @param templates
+     *         Templates to search in the stream.
      */
     public static void testMatchStream(IMetaTemplateMatcher matcher,
                                        String stream,
                                        String[] templates,
                                        ICharComparator comparator) {
         testMatchStream(matcher, stream, templates, comparator, true);
+    }
+
+    @FunctionalInterface
+    public static interface StringSupplier {
+        public String supplyString(int length);
     }
 
     //

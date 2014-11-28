@@ -3,7 +3,7 @@ package phoenix.templatesearcher.support;
 import java.util.Random;
 
 public class Utility {
-    private final static char[] ALPHABET =
+    public static final char[] ALPHABET =
             "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
     private static Random random = new Random();
 

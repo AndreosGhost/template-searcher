@@ -1,27 +1,31 @@
 package phoenix.templatesearcher.algo;
 
+import phoenix.templatesearcher.algo.api.IPineForest;
+import phoenix.templatesearcher.algo.api.IPineNode;
+import phoenix.templatesearcher.algo.api.IPineNodeVisitor;
 import phoenix.templatesearcher.exception.DuplicateLineException;
 import phoenix.templatesearcher.support.IdentifiedLine;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 
-public class PineForest<PineNode extends IPineNode> implements IPineNode, IPineForest {
-    protected final PineNode root;
+/**
+ * A complete implementation of pine forest.
+ * @param <Node> node type on which the forest is built.
+ */
+public class PineForest<Node extends IPineNode<Node>> implements IPineNode<Node>, IPineForest {
+    protected final Node root;
 
-    @Override
-    public char getParentChar() {
-        return root.getParentChar();
+    public PineForest(Node root) {
+        if (!root.isRoot()) {
+            throw new IllegalArgumentException("Given node is not a root");
+        }
+        this.root = root;
     }
 
-    @Override
-    public boolean isRoot() {
-        return root.isRoot();
-    }
-
-    @Override
-    public String getLine() {
-        return root.getLine();
+    public PineForest(Supplier<Node> rootSupplier) {
+        this(rootSupplier.get());
     }
 
     @Override
@@ -45,45 +49,57 @@ public class PineForest<PineNode extends IPineNode> implements IPineNode, IPineF
     }
 
     @Override
-    public IPineNode go(char symbol) {
+    public Node go(char symbol) {
         return root.go(symbol);
     }
 
     @Override
-    public IPineNode add(char symbol) throws IllegalArgumentException {
+    public Node add(char symbol) throws IllegalArgumentException {
         return root.add(symbol);
     }
 
     @Override
-    public IPineNode makeBoundNode(IPineNode parent, char parentChar) {
+    public Node makeBoundNode(Node parent, char parentChar) {
         return root.makeBoundNode(parent, parentChar);
     }
 
     @Override
-    public IPineNode makeNode() {
+    public Node makeNode() {
         return root.makeNode();
     }
 
     @Override
-    public IPineNode getParent() {
+    public Node thisNode() {
+        return root.thisNode();
+    }
+
+    @Override
+    public Node getParent() {
         return root.getParent();
     }
 
     @Override
-    public void walkSubtree(IPineNodeVisitor<IPineNode> visitor) {
+    public void walkSubtree(IPineNodeVisitor<IPineNode<Node>> visitor) {
         root.walkSubtree(visitor);
     }
 
-    public PineForest(PineNode root) {
-        if (!root.isRoot()) {
-            throw new IllegalArgumentException("Given node is not a root");
-        }
-        this.root = root;
+    @Override
+    public boolean isRoot() {
+        return root.isRoot();
     }
 
     @Override
-    public void addLine(char[] data, int lineID)
-            throws IllegalArgumentException, DuplicateLineException {
+    public String getLine() {
+        return root.getLine();
+    }
+
+    @Override
+    public char getParentChar() {
+        return root.getParentChar();
+    }
+
+    @Override
+    public void addLine(char[] data, int lineID) throws IllegalArgumentException, DuplicateLineException {
         if (lineID == IPineNode.NOT_END_OF_LINE_ID) {
             throw new IllegalArgumentException("Unsupported line ID given");
         }
@@ -97,13 +113,6 @@ public class PineForest<PineNode extends IPineNode> implements IPineNode, IPineF
             throw new DuplicateLineException("Line has been already added: " + new String(data));
         }
         node.setEndOfLine(lineID);
-    }
-
-    @Override
-    public List<IdentifiedLine> listIdentifiedLines() {
-        LinesExtractor extractor = new LinesExtractor();
-        root.walkSubtree(extractor);
-        return extractor.getLines();
     }
 
     @Override
@@ -125,10 +134,34 @@ public class PineForest<PineNode extends IPineNode> implements IPineNode, IPineF
         return array;
     }
 
+    @Override
+    public List<IdentifiedLine> listIdentifiedLines() {
+        LinesExtractor extractor = new LinesExtractor();
+        root.walkSubtree(extractor);
+        return extractor.getLines();
+    }
+
+    /**
+     * Adds lines from this forest to the target forest with preserved identity numbers.
+     * @param target
+     *         pine forest to add lines to.
+     * @return target pine forest.
+     * @throws java.lang.IllegalArgumentException
+     * @throws phoenix.templatesearcher.exception.DuplicateLineException
+     * @see #addLine(char[], int)
+     */
+    public <F extends PineForest<Node>> F cloneInto(F target)
+            throws IllegalArgumentException, DuplicateLineException {
+        for (IdentifiedLine myLine : listIdentifiedLines()) {
+            target.addLine(myLine.getLine().toCharArray(), myLine.getID());
+        }
+        return target;
+    }
+
     /**
      * Class for walking pine forest and pulling lines from it.
      */
-    private class LinesExtractor implements IPineNodeVisitor<IPineNode> {
+    private class LinesExtractor implements IPineNodeVisitor<IPineNode<Node>> {
         private final List<IdentifiedLine> lines = new LinkedList<>();
 
         public List<IdentifiedLine> getLines() {
@@ -136,9 +169,9 @@ public class PineForest<PineNode extends IPineNode> implements IPineNode, IPineF
         }
 
         @Override
-        public void visit(IPineNode node, StringBuilder line) {
+        public void visit(IPineNode<Node> node) {
             if (node.isEndOfLine()) {
-                lines.add(new IdentifiedLine(line.toString(), node.getEndOfLineID()));
+                lines.add(new IdentifiedLine(node.getLine(), node.getEndOfLineID()));
             }
         }
     }

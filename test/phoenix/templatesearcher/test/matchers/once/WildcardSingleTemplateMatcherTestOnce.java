@@ -6,13 +6,38 @@ import phoenix.templatesearcher.api.IMetaTemplateMatcher;
 import phoenix.templatesearcher.matchers.WildcardSingleTemplateMatcher;
 import phoenix.templatesearcher.support.ICharComparator;
 
-/**
- * Created by phoenix on 26.10.14.
- */
 public class WildcardSingleTemplateMatcherTestOnce extends SingleTemplateMatcherTestOnce {
     @Override
     public IMetaTemplateMatcher obtainFreshMatcher() {
         return new WildcardSingleTemplateMatcher();
+    }
+
+    @Deprecated
+    @Ignore
+    @Override
+    public void testAppendCharBeforeAddingTemplate() {
+        // Behaviour not supported.
+    }
+
+    @Deprecated
+    @Ignore
+    @Override
+    public void testPrependCharBeforeAddingTemplate() {
+        // Behaviour not supported.
+    }
+
+    @Deprecated
+    @Ignore
+    @Override
+    public void testAppendCharToTemplate() {
+        // Behaviour not supported.
+    }
+
+    @Deprecated
+    @Ignore
+    @Override
+    public void testPrependCharToTemplate() {
+        // Behaviour not supported.
     }
 
     @Override
@@ -98,33 +123,5 @@ public class WildcardSingleTemplateMatcherTestOnce extends SingleTemplateMatcher
         String template = "?????????????????????";
 
         testMatchSingleTemplate(stream, template);
-    }
-
-    @Deprecated
-    @Ignore
-    @Override
-    public void testAppendCharBeforeAddingTemplate() {
-        // Behaviour not supported.
-    }
-
-    @Deprecated
-    @Ignore
-    @Override
-    public void testPrependCharBeforeAddingTemplate() {
-        // Behaviour not supported.
-    }
-
-    @Deprecated
-    @Ignore
-    @Override
-    public void testAppendCharToTemplate() {
-        // Behaviour not supported.
-    }
-
-    @Deprecated
-    @Ignore
-    @Override
-    public void testPrependCharToTemplate() {
-        // Behaviour not supported.
     }
 }

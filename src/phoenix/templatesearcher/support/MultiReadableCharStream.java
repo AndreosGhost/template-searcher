@@ -22,13 +22,13 @@ public class MultiReadableCharStream implements ICharStream {
     }
 
     @Override
-    public boolean isEmpty() {
-        return pos >= streamData.length();
+    public char nextChar() {
+        return streamData.charAt(pos++);
     }
 
     @Override
-    public char nextChar() {
-        return streamData.charAt(pos++);
+    public boolean isEmpty() {
+        return pos >= streamData.length();
     }
 
     /**

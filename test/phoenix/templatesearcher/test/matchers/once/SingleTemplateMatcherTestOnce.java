@@ -23,8 +23,7 @@ public class SingleTemplateMatcherTestOnce extends NaiveTemplateMatcherTestOnce 
     }
 
     protected void testMatchSingleTemplate(String stream, String template) {
-        MatcherTester
-                .testMatchStream(matcher, stream, new String[] {template}, obtainCharComparator());
+        MatcherTester.testMatchStream(matcher, stream, new String[] {template}, obtainCharComparator());
     }
 
     @Deprecated
@@ -46,6 +45,11 @@ public class SingleTemplateMatcherTestOnce extends NaiveTemplateMatcherTestOnce 
     @Override
     public void testSearchCrossingOccurrences() {
         // Do nothing.
+    }
+
+    @Override
+    public IMetaTemplateMatcher obtainFreshMatcher() {
+        return new SingleTemplateMatcher();
     }
 
     @Test
@@ -70,15 +74,10 @@ public class SingleTemplateMatcherTestOnce extends NaiveTemplateMatcherTestOnce 
         String template = "abc";
         char appendedChar = 'c';
 
-        MatcherTester
-                .testMatchStream(matcher, stream, new String[] {template}, obtainCharComparator());
+        MatcherTester.testMatchStream(matcher, stream, new String[] {template}, obtainCharComparator());
         ((SingleTemplateMatcher) matcher).appendChar(appendedChar);
         MatcherTester.testMatchStream(
-                matcher,
-                stream,
-                new String[] {template + appendedChar},
-                obtainCharComparator(),
-                false);
+                matcher, stream, new String[] {template + appendedChar}, obtainCharComparator(), false);
     }
 
     @Test
@@ -87,15 +86,10 @@ public class SingleTemplateMatcherTestOnce extends NaiveTemplateMatcherTestOnce 
         String template = "abc";
         char prependedChar = 'a';
 
-        MatcherTester
-                .testMatchStream(matcher, stream, new String[] {template}, obtainCharComparator());
+        MatcherTester.testMatchStream(matcher, stream, new String[] {template}, obtainCharComparator());
         ((SingleTemplateMatcher) matcher).prependChar(prependedChar);
         MatcherTester.testMatchStream(
-                matcher,
-                stream,
-                new String[] {prependedChar + template},
-                obtainCharComparator(),
-                false);
+                matcher, stream, new String[] {prependedChar + template}, obtainCharComparator(), false);
     }
 
     @Test
@@ -106,10 +100,5 @@ public class SingleTemplateMatcherTestOnce extends NaiveTemplateMatcherTestOnce 
         matcher.addTemplate(randomString(10));
         matcher.matchStream(new StringCharStream(randomString(100)));
         matcher.addTemplate(randomString(10));
-    }
-
-    @Override
-    public IMetaTemplateMatcher obtainFreshMatcher() {
-        return new SingleTemplateMatcher();
     }
 }

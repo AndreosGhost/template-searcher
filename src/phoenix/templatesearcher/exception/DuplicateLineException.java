@@ -1,7 +1,7 @@
 package phoenix.templatesearcher.exception;
 
 /**
- * Created by phoenix on 25.10.14.
+ * This exceptions occurs when user attempts to add the same line to the same pine forest twice.
  */
 public class DuplicateLineException extends IllegalArgumentException {
     public DuplicateLineException(String line) {

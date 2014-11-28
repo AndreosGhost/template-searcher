@@ -49,6 +49,14 @@ public class NaiveTemplateMatcherTestOnce implements IMatcherTest {
     }
 
     @Test
+    public void testAddNullTemplate() {
+        exception.expect(NullPointerException.class);
+        exception.expectMessage("Template must not be null");
+
+        matcher.addTemplate(null);
+    }
+
+    @Test
     public void testAddEmptyTemplate() {
         exception.expect(IllegalArgumentException.class);
         exception.expectMessage("Template must not be empty");
@@ -70,19 +78,13 @@ public class NaiveTemplateMatcherTestOnce implements IMatcherTest {
     @Test
     public void testSearchSimpleOccurrence() {
         MatcherTester.testMatchStream(
-                matcher,
-                "Templ1Temp2l",
-                new String[] {"Templ"},
-                obtainCharComparator());
+                matcher, "Templ1Temp2l", new String[] {"Templ"}, obtainCharComparator());
     }
 
     @Test
     public void testSearchCrossingOccurrences() {
         MatcherTester.testMatchStream(
-                matcher,
-                "dabce",
-                new String[] {"abc", "bc", "bce"},
-                obtainCharComparator());
+                matcher, "dabce", new String[] {"abc", "bc", "bce"}, obtainCharComparator());
     }
 
     @Override
