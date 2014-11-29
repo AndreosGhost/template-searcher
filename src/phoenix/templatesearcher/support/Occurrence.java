@@ -2,6 +2,8 @@ package phoenix.templatesearcher.support;
 
 import phoenix.templatesearcher.api.IOccurrence;
 
+import java.util.Objects;
+
 public class Occurrence extends ReadOnlyPair<Integer, Integer> implements IOccurrence {
     public Occurrence(int index, int templateID) {
         super(index, templateID);
@@ -29,7 +31,7 @@ public class Occurrence extends ReadOnlyPair<Integer, Integer> implements IOccur
 
     @Override
     public int hashCode() {
-        return value * 1019 + key;
+        return Objects.hash(key, value);
     }
 
     @Override

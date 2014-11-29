@@ -4,7 +4,7 @@ import phoenix.templatesearcher.algo.PrefixFunction;
 import phoenix.templatesearcher.api.ICharStream;
 import phoenix.templatesearcher.api.IMetaTemplateMatcher;
 import phoenix.templatesearcher.api.IOccurrence;
-import phoenix.templatesearcher.support.ICharComparator;
+import phoenix.templatesearcher.algo.api.ICharComparator;
 import phoenix.templatesearcher.support.Occurrence;
 
 import java.util.LinkedList;
@@ -35,7 +35,7 @@ public class SingleTemplateMatcher implements IMetaTemplateMatcher {
 
     /**
      * Creates an instance based on default char comparator
-     * @see {@link phoenix.templatesearcher.support.ICharComparator#DEFAULT_COMPARATOR }
+     * @see {@link phoenix.templatesearcher.algo.api.ICharComparator#DEFAULT_COMPARATOR }
      */
     public SingleTemplateMatcher() {
         this(ICharComparator.DEFAULT_COMPARATOR);

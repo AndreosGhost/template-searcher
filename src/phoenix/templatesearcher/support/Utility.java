@@ -1,5 +1,9 @@
 package phoenix.templatesearcher.support;
 
+import phoenix.templatesearcher.api.IMatrix2D;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 public class Utility {
@@ -38,5 +42,28 @@ public class Utility {
         }
 
         return new String(chars);
+    }
+
+    public static Iterable<Character> iterableThroughRow (IMatrix2D matrix, int rowID, int begin, int end) {
+        return () -> new Iterator<Character>() {
+            int index = begin;
+
+            @Override
+            public boolean hasNext() {
+                return index < end;
+            }
+
+            @Override
+            public Character next() {
+                if (index == end) {
+                    throw new NoSuchElementException("Cannot go out of the border");
+                }
+                return matrix.charAt(index++, rowID);
+            }
+        };
+    }
+
+    public static Iterable<Character> iterableThroughRow(IMatrix2D matrix, int rowID) {
+        return iterableThroughRow(matrix, rowID, 0, matrix.getWidth());
     }
 }

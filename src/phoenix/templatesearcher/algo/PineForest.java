@@ -6,13 +6,18 @@ import phoenix.templatesearcher.algo.api.IPineNodeVisitor;
 import phoenix.templatesearcher.exception.DuplicateLineException;
 import phoenix.templatesearcher.support.IdentifiedLine;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.Supplier;
 
 /**
- * A complete implementation of pine forest.
- * @param <Node> node type on which the forest is built.
+ * A complete implementation of pine forest.<br/>
+ * {@link phoenix.templatesearcher.algo.api.ICharComparator} variety is not supported, but this forest
+ * compares characters like {@link phoenix.templatesearcher.algo.api.ICharComparator#DEFAULT_COMPARATOR}.
+ * @param <Node>
+ *         node type on which the forest is built.
  */
 public class PineForest<Node extends IPineNode<Node>> implements IPineNode<Node>, IPineForest {
     protected final Node root;
@@ -99,18 +104,43 @@ public class PineForest<Node extends IPineNode<Node>> implements IPineNode<Node>
     }
 
     @Override
-    public void addLine(char[] data, int lineID) throws IllegalArgumentException, DuplicateLineException {
+    public void addLine(char[] line, int lineID) throws IllegalArgumentException, DuplicateLineException {
+        addLine(
+                () -> new Iterator<Character>() {
+                    int index = 0;
+
+                    @Override
+                    public boolean hasNext() {
+                        return index < line.length;
+                    }
+
+                    @Override
+                    public Character next() {
+                        if (!hasNext()) {
+                            throw new NoSuchElementException("No more characters");
+                        }
+                        return line[index++];
+                    }
+                }, lineID);
+    }
+
+    @Override
+    public void addLine(Iterable<Character> data, int lineID)
+            throws IllegalArgumentException, DuplicateLineException {
         if (lineID == IPineNode.NOT_END_OF_LINE_ID) {
             throw new IllegalArgumentException("Unsupported line ID given");
         }
 
         IPineNode node = root;
 
-        for (char c : data) {
+        for (Character c : data) {
             node = node.add(c);
         }
         if (node.isEndOfLine()) {
-            throw new DuplicateLineException("Line has been already added: " + new String(data));
+            StringBuilder sb = new StringBuilder();
+            data.forEach((symbol) -> sb.append(symbol));
+            throw new DuplicateLineException(
+                    "Line has been already added: " + sb.toString(), node.getEndOfLineID());
         }
         node.setEndOfLine(lineID);
     }

@@ -1,7 +1,7 @@
 package phoenix.templatesearcher.test.matchers;
 
 import phoenix.templatesearcher.api.IMetaTemplateMatcher;
-import phoenix.templatesearcher.support.ICharComparator;
+import phoenix.templatesearcher.algo.api.ICharComparator;
 
 /**
  * Base interface for test classes whose tests can be reused via inheritance.
@@ -18,7 +18,7 @@ public interface IMatcherTest {
      * Obtains char comparator used to distinguish characters.<br/>
      * In most cases you will need {@link phoenix.templatesearcher.support
      * .ICharComparator#DEFAULT_COMPARATOR}.<br/>
-     * Note that your matcher must use the same {@link phoenix.templatesearcher.support.ICharComparator}
+     * Note that your matcher must use the same {@link phoenix.templatesearcher.algo.api.ICharComparator}
      * that is returned by this method.
      * @return
      */

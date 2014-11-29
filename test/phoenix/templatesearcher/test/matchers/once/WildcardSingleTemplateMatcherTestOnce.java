@@ -4,7 +4,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import phoenix.templatesearcher.api.IMetaTemplateMatcher;
 import phoenix.templatesearcher.matchers.WildcardSingleTemplateMatcher;
-import phoenix.templatesearcher.support.ICharComparator;
+import phoenix.templatesearcher.algo.api.ICharComparator;
 
 public class WildcardSingleTemplateMatcherTestOnce extends SingleTemplateMatcherTestOnce {
     @Override

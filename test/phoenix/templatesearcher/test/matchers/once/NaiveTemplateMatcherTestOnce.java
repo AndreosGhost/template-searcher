@@ -11,7 +11,7 @@ import org.junit.runners.JUnit4;
 import phoenix.templatesearcher.api.IMetaTemplateMatcher;
 import phoenix.templatesearcher.exception.DuplicateLineException;
 import phoenix.templatesearcher.matchers.NaiveTemplateMatcher;
-import phoenix.templatesearcher.support.ICharComparator;
+import phoenix.templatesearcher.algo.api.ICharComparator;
 import phoenix.templatesearcher.test.matchers.IMatcherTest;
 import phoenix.templatesearcher.test.matchers.MatcherTester;
 

@@ -3,7 +3,7 @@ package phoenix.templatesearcher.matchers;
 import phoenix.templatesearcher.api.ICharStream;
 import phoenix.templatesearcher.api.IMetaTemplateMatcher;
 import phoenix.templatesearcher.api.IOccurrence;
-import phoenix.templatesearcher.support.ICharComparator;
+import phoenix.templatesearcher.algo.api.ICharComparator;
 import phoenix.templatesearcher.support.MultiReadableCharStream;
 import phoenix.templatesearcher.support.Occurrence;
 

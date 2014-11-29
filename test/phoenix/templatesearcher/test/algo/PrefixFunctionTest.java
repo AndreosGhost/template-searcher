@@ -7,7 +7,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 import phoenix.templatesearcher.algo.PrefixFunction;
-import phoenix.templatesearcher.support.ICharComparator;
+import phoenix.templatesearcher.algo.api.ICharComparator;
 
 import java.util.Collection;
 import java.util.LinkedList;
