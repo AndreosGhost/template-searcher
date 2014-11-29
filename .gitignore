@@ -1,0 +1,10 @@
+.idea
+*.iml
+out
+jars
+/bin
+.classpath
+.project
+*.swp
+.settings
+.checkstyle
