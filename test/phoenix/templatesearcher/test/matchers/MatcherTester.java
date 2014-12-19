@@ -102,6 +102,28 @@ public final class MatcherTester {
                 StringSupplier.randomStringSupplier());
     }
 
+    public static ReadOnlyPair<String, String[]> makeTestDataWithManyRepeats(int templateLength,
+                                                                             int streamLength) {
+        if (templateLength > streamLength) {
+            throw new IllegalArgumentException("templateLength must be less than streamLength");
+        }
+
+        StringBuilder streamBuilder = new StringBuilder(randomString(streamLength));
+
+        int templateStart = randomInt(0, streamLength - templateLength);
+        int templateEnd = templateStart + templateLength;
+
+        String template = streamBuilder.substring(templateStart, templateEnd);
+
+        int maxInsertions = randomInt(1, streamLength - templateLength);
+        for (int i = 0; i < maxInsertions; i++) {
+            int insertionIndex = randomInt(0, streamBuilder.length());
+            streamBuilder.replace(insertionIndex, insertionIndex + templateLength, template);
+        }
+
+        return new ReadOnlyPair<>(streamBuilder.toString(), new String[] {template});
+    }
+
     /**
      * Generates a random test according to the given parameters for two-dimensional matrix matchers.<br/>
      * Rows are generated as random lines using {@link phoenix.templatesearcher.support
@@ -329,16 +351,22 @@ public final class MatcherTester {
         return results;
     }
 
+    public static void addTestDataManyRepeats(Collection<Object[]> data, int testsCount) {
+        for (int test = 0; test < testsCount; test++) {
+            data.add(wrapParameters(makeTestDataWithManyRepeats(randomInt(10, 100), randomInt(1000, 10000))));
+        }
+    }
+
     public static void addTestDataMultipleTemplates(Collection<Object[]> data, int testsCount) {
         for (int test = 0; test < testsCount; test++) {
-            data.add(MatcherTester.wrapParameters(makeTestData(1, 10, 1, 20, 1, 100)));
+            data.add(wrapParameters(makeTestData(1, 10, 1, 20, 1, 100)));
         }
     }
 
     public static void addTestDataOneLongTemplateShortStream(Collection<Object[]> data, int testsCount) {
         for (int test = 0; test < testsCount; test++) {
             data.add(
-                    MatcherTester.wrapParameters(makeTestData(1, 1, 15, 20, 1, 30)));
+                    wrapParameters(makeTestData(1, 1, 15, 20, 1, 30)));
         }
     }
 

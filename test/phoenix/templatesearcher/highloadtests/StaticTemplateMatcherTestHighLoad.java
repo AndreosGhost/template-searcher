@@ -1,4 +1,4 @@
-package phoenix.templatesearcher.test.matchers.highload;
+package phoenix.templatesearcher.highloadtests;
 
 import phoenix.templatesearcher.api.IMetaTemplateMatcher;
 import phoenix.templatesearcher.matchers.StaticTemplateMatcher;

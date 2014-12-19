@@ -1,4 +1,4 @@
-package phoenix.templatesearcher.test.matchers.highload;
+package phoenix.templatesearcher.highloadtests;
 
 import org.junit.Test;
 import phoenix.templatesearcher.api.IMetaTemplate2DMatcher;

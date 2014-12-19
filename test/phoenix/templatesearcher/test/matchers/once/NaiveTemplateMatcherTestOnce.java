@@ -44,6 +44,7 @@ public class NaiveTemplateMatcherTestOnce implements IMatcherTest {
                 Assert.assertEquals("Illegal template id given", i, templateID);
             } catch (DuplicateLineException exc) {
                 // Ignore it.
+                i--;
             }
         }
     }

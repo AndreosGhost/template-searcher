@@ -1,4 +1,4 @@
-package phoenix.templatesearcher.test.matchers.highload;
+package phoenix.templatesearcher.highloadtests;
 
 import org.junit.Test;
 import phoenix.templatesearcher.algo.api.ICharComparator;
@@ -83,7 +83,7 @@ public class WildcardSingleTemplateMatcherTestHighLoad extends SingleTemplateMat
         };
 
         ReadOnlyPair<String, String[]> data =
-                MatcherTester.makeTestData(1, 1, 2000, 2000, 10000, 10000, streamSupplier, templateSupplier);
+                MatcherTester.makeTestData(1, 1, 1000, 1000, 10000, 10000, streamSupplier, templateSupplier);
         performTest(data);
     }
 }

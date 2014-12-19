@@ -17,7 +17,7 @@
 - папка *test* - содержит исходный код тестов к заданию.
 	* *phoenix.templatesearcher.test.algo*
 	        Здесь лежат тесты на реализации алгоритмов (префикс-функция, бор).
-	* *phoenix.templatesearcher.test.matchers.highload*
+	* *highloadtest.highload*
 			Здесь лежат большие тесты, предназначенные для замеров производительности.
 	* *phoenix.templatesearcher.test.matchers.parameterized*
             Здесь лежат параметризованные тесты, которые выполняются многоразово для случайных данных. Данные генерируются в самих же тестах в формате JUnit Parameterized runner.

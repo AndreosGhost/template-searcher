@@ -1,4 +1,4 @@
-package phoenix.templatesearcher.test.matchers.highload;
+package phoenix.templatesearcher.highloadtests;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,9 +22,9 @@ public class NaiveTemplateMatcherTestHighLoad implements IMatcherTest {
      */
     public static final int LOCAL_RANDOM_BASE = randomInt(0, 99999999);
 
-    private static final int TEMPLATE_SIZE = 10000;
+    private static final int TEMPLATE_SIZE = 1000;
 
-    private static final int STREAM_SIZE = 100000;
+    private static final int STREAM_SIZE = 10000;
 
     /**
      * Generate a line for chars with given integer probabilities among them.<br/>

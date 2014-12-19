@@ -18,12 +18,14 @@ import java.util.List;
 import static phoenix.templatesearcher.support.Utility.*;
 import static phoenix.templatesearcher.test.matchers.MatcherTester.*;
 
+import static phoenix.templatesearcher.support.Utility.*;
+
 @RunWith(Parameterized.class)
 public class SingleTemplate2DMatcherTest implements IMatcher2DTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        int testsCount = randomInt(300, 2000);
+        int testsCount = randomInt(300, 1000);
 
         List<Object[]> tests = new LinkedList<>();
 
@@ -41,6 +43,16 @@ public class SingleTemplate2DMatcherTest implements IMatcher2DTest {
                     searchableMaxSize,
                     searchableMinSize,
                     searchableMaxSize);
+
+            if (randomInt(1, 100) <= 25) {
+                IMatrix2D bigMatrix = testData.getValue();
+                int randomX = randomInt(0, bigMatrix.getWidth() - 1);
+                int randomY = randomInt(0, bigMatrix.getHeight() - 1);
+                int width = randomInt(1, bigMatrix.getWidth() - randomX);
+                int height = randomInt(1, bigMatrix.getHeight() - randomY);
+                testData =
+                        new ReadOnlyPair<>(bigMatrix.subMatrix(randomX, randomY, width, height), bigMatrix);
+            }
             tests.add(new Object[] {testData.getKey(), testData.getValue()});
         }
 

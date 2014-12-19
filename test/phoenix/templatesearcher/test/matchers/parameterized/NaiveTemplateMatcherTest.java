@@ -17,15 +17,15 @@ import static phoenix.templatesearcher.test.matchers.MatcherTester.*;
 public class NaiveTemplateMatcherTest extends BasicMatcherTest {
     /**
      * Generates parameters for multiple tests.
-     * @return
      */
     @Parameters
     public static Collection<Object[]> data() {
         LinkedList<Object[]> tests = new LinkedList<>();
 
         addTestDataOneLongTemplateShortStream(tests, randomInt(10, 50));
-        addTestDataOneTemplate(tests, randomInt(30, 1000));
-        addTestDataMultipleTemplates(tests, randomInt(30, 1000));
+        addTestDataOneTemplate(tests, randomInt(100, 200));
+        addTestDataMultipleTemplates(tests, randomInt(100, 500));
+        addTestDataManyRepeats(tests, randomInt(100, 500));
 
         return tests;
     }
@@ -39,5 +39,6 @@ public class NaiveTemplateMatcherTest extends BasicMatcherTest {
     public ICharComparator obtainCharComparator() {
         return ICharComparator.DEFAULT_COMPARATOR;
     }
+
 
 }
